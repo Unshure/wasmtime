@@ -226,12 +226,11 @@ pub unsafe extern "C" fn wasmtime_component_linker_instance_add_func_async(
                     return Box::new(async { Err((*err).into()) });
                 }
 
-                for (rust_val, c_val) in std::iter::zip(rets, c_rets) {
-                    *rust_val = Val::from(&c_val);
-                }
-
                 Box::new(async move {
                     continuation.await;
+                    for (rust_val, c_val) in std::iter::zip(rets, c_rets) {
+                        *rust_val = Val::from(&c_val);
+                    }
                     Ok(())
                 })
             });

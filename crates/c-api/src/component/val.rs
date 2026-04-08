@@ -276,6 +276,10 @@ pub enum wasmtime_component_val_t {
     Map(wasmtime_component_valmap_t),
 }
 
+// Safety: wasmtime_component_val_t is a C FFI type whose raw pointers (in
+// String, List, etc.) are only accessed single-threaded per the C API contract.
+unsafe impl Send for wasmtime_component_val_t {}
+
 impl Default for wasmtime_component_val_t {
     fn default() -> Self {
         Self::Bool(false)
